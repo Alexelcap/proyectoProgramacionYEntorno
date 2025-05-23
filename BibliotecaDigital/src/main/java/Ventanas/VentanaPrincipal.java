@@ -47,7 +47,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Usuario:");
+        jLabel1.setText("Correo:");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel2.setText("Inicio de Sesion");

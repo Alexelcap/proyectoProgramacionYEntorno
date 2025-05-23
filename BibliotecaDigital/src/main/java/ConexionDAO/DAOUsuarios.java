@@ -18,7 +18,7 @@ public class DAOUsuarios {
         try {
             conn = ConexionBD.conectarBD();
             PreparedStatement pst = conn.prepareStatement(
-                    "select id_usuario, contraseña, nombre, correo, rol from usuario where nombre = ? and contraseña = ?");
+                    "select id_usuario, contraseña, nombre, correo, rol from usuario where correo = ? and contraseña = ?");
             pst.setString(1, login);
             pst.setString(2, contraseña);
 
