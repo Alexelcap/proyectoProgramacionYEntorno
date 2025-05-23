@@ -1,0 +1,91 @@
+-- 1. Listar todos los autores ordenados por orden alfabético inverso de la generación y luego por apellidos y nombre
+SELECT * 
+FROM Autor
+ORDER BY generacion DESC, apellidos ASC, nombre ASC;
+
+-- 2. Alumnos con al menos un tutor que comparta un apellido
+SELECT a.ID, a.nombre, a.apellido_1, a.apellido_2, 
+       t1.DNI AS tutor1_DNI, t1.nombre AS tutor1_nombre, t1.apellido_1 AS tutor1_apellido1, t1.apellido_2 AS tutor1_apellido2,
+       t2.DNI AS tutor2_DNI, t2.nombre AS tutor2_nombre, t2.apellido_1 AS tutor2_apellido1, t2.apellido_2 AS tutor2_apellido2
+FROM Alumnado a
+JOIN Matricula m ON a.ID = m.alumno
+JOIN Tutor t1 ON m.tutor_1 = t1.DNI
+JOIN Tutor t2 ON m.tutor_2 = t2.DNI
+WHERE a.apellido_1 IN (t1.apellido_1, t1.apellido_2, t2.apellido_1, t2.apellido_2)
+   OR a.apellido_2 IN (t1.apellido_1, t1.apellido_2, t2.apellido_1, t2.apellido_2);
+
+-- 3. Cantidad de alumnos por tutor (mostrando todos los datos del tutor)
+SELECT t.*, 
+       (SELECT COUNT(*) FROM Matricula m WHERE m.tutor_1 = t.DNI OR m.tutor_2 = t.DNI) AS total_alumnos
+FROM Tutor t;
+
+-- 4. Alumnos cuyo nacimiento fue al menos 25 años después que el de algún tutor
+SELECT a.*
+FROM Alumnado a
+JOIN Matricula m ON a.ID = m.alumno
+JOIN Tutor t1 ON m.tutor_1 = t1.DNI
+WHERE EXTRACT(YEAR FROM a.fecha_nacimiento) - EXTRACT(YEAR FROM t1.fecha_nacimiento) >= 25
+UNION
+SELECT a.*
+FROM Alumnado a
+JOIN Matricula m ON a.ID = m.alumno
+JOIN Tutor t2 ON m.tutor_2 = t2.DNI
+WHERE EXTRACT(YEAR FROM a.fecha_nacimiento) - EXTRACT(YEAR FROM t2.fecha_nacimiento) >= 25;
+
+-- 5. Autores sin obras registradas
+SELECT * 
+FROM Autor a
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM Obra o 
+    WHERE o.nombre_autor = a.nombre AND o.apellidos_autor = a.apellidos
+);
+
+-- 6. Segundo y tercer autor con el título más largo
+SELECT nombre_autor, apellidos_autor, nombre, LENGTH(nombre) AS longitud
+FROM Obra
+ORDER BY LENGTH(nombre) DESC
+OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY;
+
+-- 7. Parejas de personas (autores, alumnos o tutores) que comparten el mismo nombre de pila
+SELECT 'Autor' AS tipo1, a1.nombre AS nombre, a1.apellidos AS persona1, 'Alumno' AS tipo2, a2.nombre AS nombre2, a2.apellido_1 || ' ' || a2.apellido_2 AS persona2
+FROM Autor a1
+JOIN Alumnado a2 ON a1.nombre = a2.nombre
+UNION
+SELECT 'Autor', a1.nombre, a1.apellidos, 'Tutor', t.nombre, t.apellido_1 || ' ' || t.apellido_2
+FROM Autor a1
+JOIN Tutor t ON a1.nombre = t.nombre
+UNION
+SELECT 'Alumno', a1.nombre, a1.apellido_1 || ' ' || a1.apellido_2, 'Tutor', t.nombre, t.apellido_1 || ' ' || t.apellido_2
+FROM Alumnado a1
+JOIN Tutor t ON a1.nombre = t.nombre;
+
+-- 8. Matricular a “Cocoliso Cabeza Melón”
+DECLARE
+    v_new_id INT;
+BEGIN
+    SELECT MAX(ID) + 1 INTO v_new_id FROM Alumnado;
+
+    INSERT INTO Alumnado (ID, nombre, apellido_1, apellido_2, DNI, fecha_nacimiento)
+    VALUES (v_new_id, 'Cocoliso', 'Cabeza', 'Melón', '99999999Z', SYSDATE - 15);
+
+    INSERT INTO Matricula (alumno, curso, clase, centro, ciudad, tutor_1, tutor_2, coste, fecha)
+    VALUES (v_new_id, '1º INF', 'A', 'Centro D', 'Sevilla', '12345678A', '23456789B', 0.00, SYSDATE);
+END;
+/
+
+-- 9. Añadir “ZZ” al nombre de los autores con obras prohibidas
+UPDATE Autor 
+SET nombre = 'ZZ' || nombre
+WHERE (nombre, apellidos) IN (
+    SELECT nombre_autor, apellidos_autor
+    FROM Obra
+    WHERE fue_prohibida = 1
+);
+
+-- 10. Borrar a Antonio Machado
+DELETE FROM Obra
+WHERE nombre_autor = 'Antonio' AND apellidos_autor = 'Machado';
+
+DELETE FROM Autor
+WHERE nombre = 'Antonio' AND apellidos = 'Machado';

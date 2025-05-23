@@ -1,0 +1,8 @@
+[2025-05-20 00:45:04] AGREGAR LIBRO - Libro: Las Aventuras de Jorge, ISBN: 1234567809, Autor: Luis
+[2025-05-20 00:47:05] AGREGAR LIBRO - Libro: Las Aventuras de Jorge, ISBN: 123456123, Autor: Jose Antonio
+[2025-05-20 00:52:09] AGREGAR LIBRO - Libro: Pinpin placaplaca, ISBN: 098765778, Autor: Jose Antonio
+[2025-05-20 09:15:28] ACTUALIZAR AUTOR - ID: 15, Nombre: Clara, Nacionalidad: Taiwanes
+[22-05-2025      10:52:05] AGREGAR LIBRO - Libro: ¿Quien fue el Coronel  Prado Gutierrez?, ISBN: 8963538202764, Autor: David Lopez Guzman
+[22-05-2025      10:52:22] ACTUALIZAR AUTOR - ID: 100, Nombre: David Lopez Guzman, Nacionalidad: Argentino
+[22-05-2025      10:52:39] ACTUALIZAR AUTOR - ID: 100, Nombre: David Lopez Guzman, Nacionalidad: Argentino
+[22-05-2025      10:58:08] ELIMINAR LIBRO - ISBN: 8963538202764

@@ -1,0 +1,15 @@
+-El Administrador puede añadir libros pero también puede borrarlos
+
+-El id de cada libro se pondrá aleatorio
+
+-El ISBN se pondrá aleatorio
+
+-Cada vez que el administrador introduzca un libro el estado se pondrá automáticamente en "Disponible"
+
+-Cuando un usuario haga click en el libro que esta interesado tendrá 15 días para poder leerlo
+
+-En el caso de que le de click al libro que quiera leer, le aparecerá una ventana donde pondrá "¿Esta seguro?" con dos opciones de "Si" y "No"
+si le da a "Si" le aparecera otra ventana donde le advirtira de que tiene 15 días de consumo (Mostrando la fecha) antes de que se acabe su plazo
+si le da a "No" volverá a la ventana de usuario pudiendo elegir otro libro.
+
+-Al pulsar el botón agregar o borrar libro deberá de crearse un fichero que ponga todo lo que haya pasado tipo: Se ha borrado el libro … o se ha agragado el libro …

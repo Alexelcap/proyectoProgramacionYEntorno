@@ -1,0 +1,5 @@
+Diagrama Uml{
+1.- Un autor puede escribir varios libros
+2.- Un libro a sido prestado varias veces 
+3.- Un usuario puede hacer varios prestamos
+}
